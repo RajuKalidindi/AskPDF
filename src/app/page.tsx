@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import FileUpload from "@/components/FileUpload";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { LogIn } from "lucide-react";
@@ -35,8 +36,8 @@ export default async function Home() {
 							<Image
 								src="/pdf2.png"
 								alt="PDF icon"
-								width={114}
-								height={114}
+								width={128}
+								height={128}
 								className="inline-block align-middle ml-2"
 							/>
 						</h2>
@@ -50,7 +51,7 @@ export default async function Home() {
 					</div>
 					<div className="w-full mt-4">
 						{isAuth ? (
-							<div>File Upload</div>
+							<FileUpload />
 						) : (
 							<Link href="/sign-in">
 								<Button>
