@@ -5,9 +5,11 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { getDropboxClient } from "@/utils/dropbox";
+import { getDropboxClient } from "@/lib/dropbox";
+import { useRouter } from "next/navigation";
 
 const FileUpload = () => {
+	const router = useRouter();
 	const [uploading, setUploading] = useState(false);
 
 	const { mutate } = useMutation({
@@ -83,9 +85,9 @@ const FileUpload = () => {
 				mutate(
 					{ file_key, file_name },
 					{
-						onSuccess: (data) => {
+						onSuccess: ({ chat_id }) => {
 							toast.success("Chat created successfully");
-							console.log("Chat created:", data);
+							router.push(`/chat/${chat_id}`);
 						},
 						onError: (error) => {
 							toast.error("Error creating chat");

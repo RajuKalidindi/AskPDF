@@ -1,4 +1,5 @@
 import { Dropbox } from "dropbox";
+import fetch from "cross-fetch";
 
 interface DropboxTokens {
 	access_token: string;
@@ -49,7 +50,8 @@ export async function getDropboxClient(): Promise<Dropbox> {
 			dropboxTokens = {
 				access_token: data.access_token,
 				refresh_token:
-					data.refresh_token || process.env.DROPBOX_REFRESH_TOKEN,
+					data.refresh_token ||
+					process.env.NEXT_PUBLIC_DROPBOX_REFRESH_TOKEN,
 				expires_at: Date.now() + data.expires_in * 1000,
 			};
 
@@ -62,5 +64,6 @@ export async function getDropboxClient(): Promise<Dropbox> {
 
 	return new Dropbox({
 		accessToken: dropboxTokens.access_token,
+		fetch: fetch.bind(globalThis),
 	});
 }
