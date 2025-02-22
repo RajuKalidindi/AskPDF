@@ -11,7 +11,6 @@ export async function POST(req: Request) {
 	}
 	try {
 		const { file_key, file_name } = await req.json();
-		console.log("Received file_key:", file_key, "file_name:", file_name);
 		await loadPDF(file_key);
 		const chat_id = await db
 			.insert(chats)

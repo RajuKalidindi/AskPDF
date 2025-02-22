@@ -8,6 +8,7 @@ import {
 import { getGeminiEmbeddings } from "./embedding";
 import md5 from "md5";
 import { Vector } from "@pinecone-database/pinecone/dist/pinecone-generated-ts-fetch/db_data";
+import { convertToASCII } from "./utils";
 
 export const getPinecone = async () => {
 	const apiKey = process.env.NEXT_PUBLIC_PINECONE_API_KEY;
@@ -28,12 +29,10 @@ type PDFPage = {
 };
 
 export const loadPDF = async (file_key: string) => {
-	console.log("Downloading PDF from Dropbox...");
 	const file_path = await downloadFromDropbox(file_key);
 	if (!file_path) {
 		throw new Error("Error downloading file from Dropbox");
 	}
-	console.log("PDF downloaded to:", file_path);
 	const loader = new PDFLoader(file_path);
 	const pdf_pages = (await loader.load()) as unknown as PDFPage[];
 
@@ -44,12 +43,12 @@ export const loadPDF = async (file_key: string) => {
 	if (!process.env.NEXT_PUBLIC_PINECONE_INDEX) {
 		throw new Error("Missing Pinecone index in environment variables");
 	}
-	const index = client.Index(
-		process.env.NEXT_PUBLIC_PINECONE_INDEX,
-		process.env.NEXT_PUBLIC_PINECONE_HOST
-	);
-
-	console.log("Inserting vectors into Pinecone...");
+	const index = client
+		.Index(
+			process.env.NEXT_PUBLIC_PINECONE_INDEX,
+			process.env.NEXT_PUBLIC_PINECONE_HOST
+		)
+		.namespace(convertToASCII(file_key));
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const chunks = (array: any, batchSize = 200) => {

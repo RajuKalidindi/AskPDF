@@ -32,7 +32,6 @@ const FileUpload = () => {
 		accept: { "application/pdf": [".pdf"] },
 		maxFiles: 1,
 		onDrop: async (acceptedFiles) => {
-			console.log("acceptedFiles", acceptedFiles);
 			const file = acceptedFiles[0];
 			if (file.size > 10 * 1024 * 1024) {
 				toast.error("Please upload a smaller file");
@@ -76,7 +75,6 @@ const FileUpload = () => {
 					}
 				}
 				const file_name = file.name;
-				console.log("File uploaded to Dropbox:", file_key, file_name);
 				if (!file_key || !file_name) {
 					toast.error("Error uploading file");
 					return;
@@ -95,7 +93,6 @@ const FileUpload = () => {
 						},
 					}
 				);
-				console.log("File uploaded successfully");
 			} catch (error) {
 				console.error(error);
 				toast.error("Upload failed");

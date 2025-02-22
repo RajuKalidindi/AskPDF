@@ -6,7 +6,6 @@ export async function downloadFromDropbox(file_key: string) {
 	try {
 		const dbx = await getDropboxClient();
 		const response = await dbx.sharingGetSharedLinkFile({ url: file_key });
-		console.log("Dropbox response:", response);
 		const tempDir = os.tmpdir();
 		const file_path = `${tempDir}/pdf-${Date.now()}.pdf`;
 
@@ -24,7 +23,6 @@ export async function downloadFromDropbox(file_key: string) {
 		}
 
 		fs.writeFileSync(file_path, fileContent);
-		console.log("File saved to:", file_path);
 		return file_path;
 	} catch (error) {
 		console.error("Error downloading file from Dropbox:", error);
