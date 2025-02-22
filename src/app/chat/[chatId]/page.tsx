@@ -8,15 +8,15 @@ import PDFViewer from "@/components/PDFViewer";
 import Chat from "@/components/Chat";
 
 interface ChatPageProps {
-	params: {
+	params: Promise<{
 		chatId: string;
-	};
+	}>;
 }
 
-const ChatPage = async (props: ChatPageProps) => {
-	const params = await Promise.resolve(props.params);
-	const { chatId } = params;
+const ChatPage = async ({ params }: ChatPageProps) => {
+	const { chatId } = await params;
 	const { userId } = await auth();
+
 	if (!userId) {
 		redirect("/sign-in");
 	}
